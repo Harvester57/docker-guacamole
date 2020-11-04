@@ -6,7 +6,8 @@ ENV ARCH=amd64 \
   PG_MAJOR=9.6 \
   PGDATA=/config/postgres \
   POSTGRES_USER=guacamole \
-  POSTGRES_DB=guacamole_db
+  POSTGRES_DB=guacamole_db \
+  JDBC_VER=42.2.18
 
 # Apply the s6-overlay
 
@@ -27,7 +28,7 @@ RUN apt-get update && apt-get install -y \
   libswscale-dev freerdp2-dev libfreerdp-client2-2 libpango1.0-dev \
   libssh2-1-dev libtelnet-dev libvncserver-dev \
   libpulse-dev libssl-dev libvorbis-dev libwebp-dev libwebsockets-dev \
-  ghostscript postgresql-${PG_MAJOR} gcc g++ build-essential make\
+  ghostscript postgresql-${PG_MAJOR} build-essential --no-install-recommends\
   && rm -rf /var/lib/apt/lists/*
 
 # Link FreeRDP to where guac expects it to be
@@ -49,7 +50,7 @@ RUN curl -SLO "http://apache.org/dyn/closer.cgi?action=download&filename=guacamo
 RUN set -x \
   && rm -rf ${CATALINA_HOME}/webapps/ROOT \
   && curl -SLo ${CATALINA_HOME}/webapps/ROOT.war "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/${GUAC_VER}/binary/guacamole-${GUAC_VER}.war" \
-  && curl -SLo ${GUACAMOLE_HOME}/lib/postgresql-42.1.4.jar "https://jdbc.postgresql.org/download/postgresql-42.1.4.jar" \
+  && curl -SLo ${GUACAMOLE_HOME}/lib/postgresql-${JDBC_VER}.jar "https://jdbc.postgresql.org/download/postgresql-${JDBC_VER}.jar" \
   && curl -SLO "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/${GUAC_VER}/binary/guacamole-auth-jdbc-${GUAC_VER}.tar.gz" \
   && tar -xzf guacamole-auth-jdbc-${GUAC_VER}.tar.gz \
   && cp -R guacamole-auth-jdbc-${GUAC_VER}/postgresql/guacamole-auth-jdbc-postgresql-${GUAC_VER}.jar ${GUACAMOLE_HOME}/extensions/ \
