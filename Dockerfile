@@ -3,7 +3,7 @@ FROM tomcat:9.0.39-jdk11
 ENV ARCH=amd64 \
   GUAC_VER=1.2.0 \
   GUACAMOLE_HOME=/app/guacamole \
-  PG_MAJOR=11 \
+  PG_MAJOR=9.6 \
   PGDATA=/config/postgres \
   POSTGRES_USER=guacamole \
   POSTGRES_DB=guacamole_db \
@@ -11,7 +11,7 @@ ENV ARCH=amd64 \
 
 # Apply the s6-overlay
 
-RUN curl -SLO "https://github.com/just-containers/s6-overlay/releases/download/v1.20.0.0/s6-overlay-${ARCH}.tar.gz" \
+RUN curl -SLO "https://github.com/just-containers/s6-overlay/releases/download/v1.20.0.1/s6-overlay-${ARCH}.tar.gz" \
   && tar -xzf s6-overlay-${ARCH}.tar.gz -C / \
   && tar -xzf s6-overlay-${ARCH}.tar.gz -C /usr ./bin \
   && rm -rf s6-overlay-${ARCH}.tar.gz \
@@ -21,8 +21,17 @@ RUN curl -SLO "https://github.com/just-containers/s6-overlay/releases/download/v
 
 WORKDIR ${GUACAMOLE_HOME}
 
+RUN \
+  apt-get update && \
+  # Needed to import the LLVM repo key and handle the HTTPS cert
+  apt-get install gnupg2 ca-certificates -y
+
+COPY postgresql.list /etc/apt/sources.list.d
+
 # Install dependencies
-RUN apt-get update && apt-get install -y \
+RUN \
+  apt-key adv --fetch-keys https://www.postgresql.org/media/keys/ACCC4CF8.asc && \
+  apt-get update && apt-get install -y \
   libcairo2-dev libjpeg62-turbo-dev libpng-dev \
   libossp-uuid-dev libavcodec-dev libavutil-dev \
   libswscale-dev freerdp2-dev libfreerdp-client2-2 libpango1.0-dev \
