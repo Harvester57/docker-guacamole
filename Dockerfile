@@ -1,4 +1,4 @@
-FROM tomcat:9.0.39-jdk11
+FROM tomcat:9.0.40-jdk11
 
 ENV ARCH=amd64 \
   GUAC_VER=1.2.0 \
