@@ -1,17 +1,20 @@
 FROM tomcat:9.0.41-jdk11
 
 ENV ARCH=amd64 \
-  GUAC_VER=1.2.0 \
+  # https://guacamole.apache.org/releases/
+  GUAC_VER=1.3.0 \
   GUACAMOLE_HOME=/app/guacamole \
   PG_MAJOR=9.6 \
   PGDATA=/config/postgres \
   POSTGRES_USER=guacamole \
   POSTGRES_DB=guacamole_db \
-  JDBC_VER=42.2.18
+  # https://jdbc.postgresql.org/download.html#current
+  JDBC_VER=42.2.18 \
+  # https://github.com/just-containers/s6-overlay/releases
+  OVERLAY_VER=2.1.0.2 
 
 # Apply the s6-overlay
-
-RUN curl -SLO "https://github.com/just-containers/s6-overlay/releases/download/v2.1.0.2/s6-overlay-${ARCH}.tar.gz" \
+RUN curl -SLO "https://github.com/just-containers/s6-overlay/releases/download/v${OVERLAY_VER}/s6-overlay-${ARCH}.tar.gz" \
   && tar -xzf s6-overlay-${ARCH}.tar.gz -C / \
   && tar -xzf s6-overlay-${ARCH}.tar.gz -C /usr ./bin \
   && rm -rf s6-overlay-${ARCH}.tar.gz \
