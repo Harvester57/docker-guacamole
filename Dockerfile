@@ -11,7 +11,7 @@ ENV ARCH=amd64 \
   # https://jdbc.postgresql.org/download.html#current
   JDBC_VER=42.2.18 \
   # https://github.com/just-containers/s6-overlay/releases
-  OVERLAY_VER=2.1.0.2 
+  OVERLAY_VER=2.2.0.1 
 
 # Apply the s6-overlay
 RUN curl -SLO "https://github.com/just-containers/s6-overlay/releases/download/v${OVERLAY_VER}/s6-overlay-${ARCH}.tar.gz" \
