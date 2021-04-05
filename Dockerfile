@@ -1,4 +1,4 @@
-FROM tomcat:9.0.44-jdk15
+FROM tomcat:9.0.45-jdk15
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
