@@ -1,4 +1,4 @@
-FROM tomcat:9.0.45-jdk15
+FROM tomcat:9.0.45-jdk16
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
@@ -9,7 +9,7 @@ ENV ARCH=amd64 \
   POSTGRES_USER=guacamole \
   POSTGRES_DB=guacamole_db \
   # https://jdbc.postgresql.org/download.html#current
-  JDBC_VER=42.2.19 \
+  JDBC_VER=42.2.20 \
   # https://github.com/just-containers/s6-overlay/releases
   OVERLAY_VER=2.2.0.3
 
