@@ -1,4 +1,4 @@
-FROM tomcat:9.0.45-jdk16
+FROM tomcat:9.0.46-jdk16
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
@@ -26,7 +26,8 @@ WORKDIR ${GUACAMOLE_HOME}
 
 RUN \
   apt-get update && \
-  # Needed to import the LLVM repo key and handle the HTTPS cert
+  apt-get dist-upgrade -y && \
+  # Needed to handle the HTTPS certs and import third-party repos
   apt-get install gnupg2 ca-certificates -y
 
 COPY postgresql.list /etc/apt/sources.list.d
