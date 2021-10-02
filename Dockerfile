@@ -1,5 +1,5 @@
 # Cf. https://hub.docker.com/_/tomcat
-FROM tomcat:9.0.52-jdk16
+FROM tomcat:9.0.53-jdk17
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
@@ -10,7 +10,7 @@ ENV ARCH=amd64 \
   POSTGRES_USER=guacamole \
   POSTGRES_DB=guacamole_db \
   # https://jdbc.postgresql.org/download.html#current
-  JDBC_VER=42.2.23 \
+  JDBC_VER=42.2.24 \
   # https://github.com/just-containers/s6-overlay/releases
   OVERLAY_VER=2.2.0.3
 
