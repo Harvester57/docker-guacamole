@@ -30,7 +30,7 @@ RUN \
   apt-get update && \
   apt-get dist-upgrade -y && \
   # Needed to handle the HTTPS certs and import third-party repos
-  apt-get install gnupg2 ca-certificates -y $$ \
+  apt-get install gnupg2 ca-certificates -y && \
   update-ca-certificates
 
 COPY postgresql.list /etc/apt/sources.list.d
