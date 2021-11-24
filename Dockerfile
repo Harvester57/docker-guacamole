@@ -58,7 +58,7 @@ RUN \
   tar -xzf guacamole-server-${GUAC_VER}.tar.gz && \
   cd guacamole-server-${GUAC_VER} && \
   export CFLAGS="-O3 -pipe -g0 -march=broadwell -mtune=broadwell -fstack-protector-strong -D_FORTIFY_SOURCE=2 -fstack-clash-protection" && \
-  export LDFLAGS="-Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code" && \
+  export LDFLAGS="-Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code -Wl,--strip-all" && \
   ./configure && \
   make -j$(getconf _NPROCESSORS_ONLN) && \
   make install && \
