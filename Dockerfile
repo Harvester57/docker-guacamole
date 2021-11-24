@@ -57,7 +57,7 @@ RUN \
   curl -k -SLO "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/${GUAC_VER}/source/guacamole-server-${GUAC_VER}.tar.gz" && \
   tar -xzf guacamole-server-${GUAC_VER}.tar.gz && \
   cd guacamole-server-${GUAC_VER} && \
-  export CFLAGS="-O3 -pipe -march=broadwell -mtune=broadwell -fstack-protector-strong -D_FORTIFY_SOURCE=2" && \
+  export CFLAGS="-O3 -pipe -g0 -march=broadwell -mtune=broadwell -fstack-protector-strong -D_FORTIFY_SOURCE=2 -fstack-clash-protection" && \
   ./configure && \
   make -j$(getconf _NPROCESSORS_ONLN) && \
   make install && \
@@ -85,7 +85,7 @@ RUN \
   echo "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/${GUAC_VER}/binary/guacamole-${i}-${GUAC_VER}.tar.gz" && \
   curl -k -SLO "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/${GUAC_VER}/binary/guacamole-${i}-${GUAC_VER}.tar.gz" && \
   tar -xzf guacamole-${i}-${GUAC_VER}.tar.gz && \
-  cp guacamole-${i}-${GUAC_VER}/guacamole-${i}-${GUAC_VER}.jar ${GUACAMOLE_HOME}/extensions-available/ && \
+  cp guacamole-${i}-${GUAC_VER}/guacamole-${i}-${GUAC_VER}.jar ${GUACAMOLE_HOME}/extensions-available/ \
   rm -rf guacamole-${i}-${GUAC_VER} guacamole-${i}-${GUAC_VER}.tar.gz && \
   ;done
 
