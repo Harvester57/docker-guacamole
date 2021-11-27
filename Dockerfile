@@ -1,5 +1,5 @@
 # Cf. https://hub.docker.com/_/tomcat
-FROM tomcat:9.0.55-jdk17
+FROM tomcat:10.0.13-jdk17
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
