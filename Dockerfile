@@ -40,7 +40,7 @@ RUN \
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8 && \
   apt-get update && apt-get install -y \
   libcairo2-dev libjpeg62-turbo-dev libpng-dev \
-  libossp-uuid-dev libavcodec-dev libavutil-dev \
+  libossp-uuid-dev libavcodec-dev libavutil-dev libavformat-dev \
   libswscale-dev freerdp2-dev libfreerdp-client2-2 libpango1.0-dev \
   libssh2-1-dev libtelnet-dev libvncserver-dev \
   libpulse-dev libssl-dev libvorbis-dev libwebp-dev libwebsockets-dev \
