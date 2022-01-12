@@ -3,7 +3,7 @@ FROM tomcat:9.0.56-jdk17
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
-  GUAC_VER=1.3.0 \
+  GUAC_VER=1.4.0 \
   GUACAMOLE_HOME=/app/guacamole \
   PG_MAJOR=9.6 \
   PGDATA=/config/postgres \
