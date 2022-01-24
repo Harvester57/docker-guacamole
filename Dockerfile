@@ -1,5 +1,5 @@
 # Cf. https://github.com/docker-library/docs/blob/master/tomcat/README.md#supported-tags-and-respective-dockerfile-links
-FROM tomcat:9.0.56-jdk17
+FROM tomcat:9.0.58-jdk17
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
