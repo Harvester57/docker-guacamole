@@ -10,9 +10,9 @@ ENV ARCH=amd64 \
   POSTGRES_USER=guacamole \
   POSTGRES_DB=guacamole_db \
   # https://jdbc.postgresql.org/download.html#current
-  JDBC_VER=42.3.1 \
+  JDBC_VER=42.3.2 \
   # https://github.com/just-containers/s6-overlay/releases
-  OVERLAY_VER=2.2.0.3
+  OVERLAY_VER=3.0.0.2
 
 # Apply the s6-overlay
 RUN \
