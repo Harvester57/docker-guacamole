@@ -16,10 +16,10 @@ ENV ARCH=amd64 \
 
 # Apply the s6-overlay
 RUN \
-  curl -k -SLO "https://github.com/just-containers/s6-overlay/releases/download/v${OVERLAY_VER}/s6-overlay-x86_64-${OVERLAY_VER}.tar.xz" && \
-  tar -xf s6-overlay-x86_64-${OVERLAY_VER}.tar.xz -C / && \
-  tar -xf s6-overlay-x86_64-${OVERLAY_VER}.tar.xz -C /usr ./bin && \
-  rm -rf s6-overlay-x86_64-${OVERLAY_VER}.tar.xz && \
+  curl -k -SLO "https://github.com/just-containers/s6-overlay/releases/download/v${OVERLAY_VER}/s6-overlay-x86_64-${OVERLAY_VER}.tar.xz"
+  RUN tar -xf s6-overlay-x86_64-${OVERLAY_VER}.tar.xz -C /
+  RUN tar -xf s6-overlay-x86_64-${OVERLAY_VER}.tar.xz -C /usr ./bin
+  RUN rm -rf s6-overlay-x86_64-${OVERLAY_VER}.tar.xz && \
   mkdir -p ${GUACAMOLE_HOME} \
   ${GUACAMOLE_HOME}/lib \
   ${GUACAMOLE_HOME}/extensions
