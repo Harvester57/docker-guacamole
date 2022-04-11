@@ -1,5 +1,5 @@
 # Cf. https://github.com/docker-library/docs/blob/master/tomcat/README.md#supported-tags-and-respective-dockerfile-links
-FROM tomcat:9.0.62-jdk17
+FROM tomcat:9.0.62-jdk17 AS builder
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
@@ -14,26 +14,14 @@ ENV ARCH=amd64 \
   # https://github.com/just-containers/s6-overlay/releases
   OVERLAY_VER=2.2.0.3
 
-# Apply the s6-overlay
-RUN \
-  curl -k -SLO "https://github.com/just-containers/s6-overlay/releases/download/v${OVERLAY_VER}/s6-overlay-${ARCH}.tar.gz" && \
-  tar -xzf s6-overlay-${ARCH}.tar.gz -C / && \
-  tar -xzf s6-overlay-${ARCH}.tar.gz -C /usr ./bin && \
-  rm -rf s6-overlay-${ARCH}.tar.gz && \
-  mkdir -p ${GUACAMOLE_HOME} \
-  ${GUACAMOLE_HOME}/lib \
-  ${GUACAMOLE_HOME}/extensions
-
 WORKDIR ${GUACAMOLE_HOME}
 
 RUN \
   apt-get update && \
   apt-get dist-upgrade -y && \
   # Needed to handle the HTTPS certs and import third-party repos
-  apt-get install gnupg2 ca-certificates -y && \
+  apt-get install gnupg2 ca-certificates checkinstall -y && \
   update-ca-certificates
-
-COPY postgresql.list /etc/apt/sources.list.d
 
 # Install dependencies
 RUN \
@@ -49,10 +37,9 @@ RUN \
   rm -rf /var/lib/apt/lists/*
 
 # Link FreeRDP to where guac expects it to be
-RUN [ "$ARCH" = "armhf" ] && ln -s /usr/local/lib/freerdp /usr/lib/arm-linux-gnueabihf/freerdp || exit 0
 RUN [ "$ARCH" = "amd64" ] && ln -s /usr/local/lib/freerdp /usr/lib/x86_64-linux-gnu/freerdp || exit 0
 
-# Install guacamole-server
+# Build guacamole-server
 RUN \
   curl -k -SLO "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/${GUAC_VER}/source/guacamole-server-${GUAC_VER}.tar.gz" && \
   tar -xzf guacamole-server-${GUAC_VER}.tar.gz && \
@@ -61,10 +48,47 @@ RUN \
   export LDFLAGS="-Wl,-z,relro -Wl,-z,now -Wl,--as-needed -Wl,-z,defs -Wl,-z,noexecheap -Wl,-O1 -Wl,-z,noexecstack -Wl,-z,separate-code -Wl,--strip-all" && \
   ./configure && \
   make -j$(getconf _NPROCESSORS_ONLN) && \
-  make install && \
-  cd .. && \
-  rm -rf guacamole-server-${GUAC_VER}.tar.gz guacamole-server-${GUAC_VER} && \
-  ldconfig
+  checkinstall --install=no --default && \
+  cp *.deb / && ls /
+  
+# Multi-stage build
+FROM tomcat:9.0.62-jdk17
+
+WORKDIR ${GUACAMOLE_HOME}
+
+# Link FreeRDP to where guac expects it to be
+RUN [ "$ARCH" = "amd64" ] && ln -s /usr/local/lib/freerdp /usr/lib/x86_64-linux-gnu/freerdp || exit 0
+
+RUN \
+  apt-get update && \
+  apt-get dist-upgrade -y && \
+  # Needed to handle the HTTPS certs and import third-party repos
+  apt-get install gnupg2 ca-certificates checkinstall -y && \
+  update-ca-certificates
+
+# Apply the s6-overlay
+RUN \
+  curl -k -SLO "https://github.com/just-containers/s6-overlay/releases/download/v${OVERLAY_VER}/s6-overlay-${ARCH}.tar.gz" && \
+  tar -xzf s6-overlay-${ARCH}.tar.gz -C / && \
+  tar -xzf s6-overlay-${ARCH}.tar.gz -C /usr ./bin && \
+  rm -rf s6-overlay-${ARCH}.tar.gz && \
+  mkdir -p ${GUACAMOLE_HOME} \
+  ${GUACAMOLE_HOME}/lib \
+  ${GUACAMOLE_HOME}/extensions
+
+COPY postgresql.list /etc/apt/sources.list.d
+COPY --from=builder /*.deb /
+
+RUN \
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8 && \
+  apt-get update && apt-get install -y \
+  postgresql-${PG_MAJOR} --no-install-recommends && \
+  apt-get clean && \ 
+  rm -rf /var/lib/apt/lists/*
+
+# Install Guacamole deb package imported from builder
+RUN \
+  dpkg -i /*.deb
 
 # Install guacamole-client and postgres auth adapter
 RUN \
