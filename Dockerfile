@@ -90,7 +90,7 @@ RUN \
   ${GUACAMOLE_HOME}/extensions
 
 COPY postgresql.list /etc/apt/sources.list.d
-COPY --from=builder /*.deb /
+COPY --from=0 /*.deb /
 
 RUN \
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8 && \
