@@ -3,6 +3,7 @@ FROM tomcat:9.0.62-jdk17
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
+  GUACAMOLE_HOME=/app/guacamole \
   GUAC_VER=1.4.0 \
 
 WORKDIR ${GUACAMOLE_HOME}
