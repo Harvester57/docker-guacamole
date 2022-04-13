@@ -54,6 +54,19 @@ RUN \
 # Multi-stage build
 FROM tomcat:9.0.62-jdk17
 
+ENV ARCH=amd64 \
+  # https://guacamole.apache.org/releases/
+  GUAC_VER=1.4.0 \
+  GUACAMOLE_HOME=/app/guacamole \
+  PG_MAJOR=9.6 \
+  PGDATA=/config/postgres \
+  POSTGRES_USER=guacamole \
+  POSTGRES_DB=guacamole_db \
+  # https://jdbc.postgresql.org/download.html#current
+  JDBC_VER=42.3.3 \
+  # https://github.com/just-containers/s6-overlay/releases
+  OVERLAY_VER=2.2.0.3
+
 WORKDIR ${GUACAMOLE_HOME}
 
 # Link FreeRDP to where guac expects it to be
