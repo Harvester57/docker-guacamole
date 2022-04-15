@@ -1,5 +1,5 @@
 # Cf. https://github.com/docker-library/docs/blob/master/tomcat/README.md#supported-tags-and-respective-dockerfile-links
-FROM tomcat:9.0.62-jdk17
+FROM bullseye-20220328
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
@@ -10,9 +10,8 @@ WORKDIR ${GUACAMOLE_HOME}
 
 RUN \
   apt-get update && \
-  apt-get dist-upgrade -y && \
   # Needed to handle the HTTPS certs and import third-party repos
-  apt-get install gnupg2 ca-certificates checkinstall -y && \
+  apt-get install gnupg2 ca-certificates checkinstall -y --no-install-recommends && \
   update-ca-certificates
 
 # Install dependencies
@@ -44,6 +43,7 @@ RUN \
   cp *.deb / && ls /
   
 # Multi-stage build
+# Cf. https://github.com/docker-library/docs/blob/master/tomcat/README.md#supported-tags-and-respective-dockerfile-links
 FROM tomcat:9.0.62-jdk17
 
 ENV ARCH=amd64 \
