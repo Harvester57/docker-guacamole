@@ -1,5 +1,5 @@
 # Cf. https://github.com/docker-library/docs/blob/master/tomcat/README.md#supported-tags-and-respective-dockerfile-links
-FROM bullseye-20220328
+FROM debian:bullseye-20220328
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
