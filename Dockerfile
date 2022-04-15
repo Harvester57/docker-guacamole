@@ -93,7 +93,8 @@ RUN \
 
 # Install Guacamole deb package imported from builder
 RUN \
-  dpkg -i /*.deb
+  dpkg -i /*.deb && \
+  ldconfig
 
 # Install guacamole-client and postgres auth adapter
 RUN \
