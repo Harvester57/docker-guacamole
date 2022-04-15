@@ -87,7 +87,7 @@ COPY --from=0 /*.deb /
 RUN \
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8 && \
   apt-get update && apt-get install -y \
-  postgresql-${PG_MAJOR} libcairo2 libfreerdp2-2 --no-install-recommends && \
+  postgresql-${PG_MAJOR} libcairo2 libfreerdp2-2 libfreerdp-server2-2 libfreerdp-client2-2 libfreerdp-shadow-subsystem2-2 libfreerdp-shadow2-2 --no-install-recommends && \
   apt-get clean && \ 
   rm -rf /var/lib/apt/lists/*
 
