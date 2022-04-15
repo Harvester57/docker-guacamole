@@ -38,7 +38,7 @@ RUN \
   cd guacamole-server-${GUAC_VER} && \
   export CFLAGS="-O3 -pipe -g0 -s -march=broadwell -mtune=broadwell -fstack-protector-all -D_FORTIFY_SOURCE=2 -Wp,-D_FORTIFY_SOURCE=2 -fstack-clash-protection -flto=4 -fPIE -pie" && \
   export LDFLAGS="-Wl,-z,relro -Wl,-z,now -Wl,--as-needed -Wl,-z,defs -Wl,-z,noexecheap -Wl,-O1 -Wl,-z,noexecstack -Wl,-z,separate-code -Wl,--strip-all" && \
-  ./configure && \
+  ./configure --disable-guacenc --disable-guaclog --enable-static && \
   make -j$(getconf _NPROCESSORS_ONLN) && \
   checkinstall --install=no --default && \
   cp *.deb / && ls /
