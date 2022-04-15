@@ -11,7 +11,7 @@ WORKDIR ${GUACAMOLE_HOME}
 RUN \
   apt-get update && \
   # Needed to handle the HTTPS certs and import third-party repos
-  apt-get install gnupg2 ca-certificates checkinstall -y --no-install-recommends && \
+  apt-get install curl gnupg2 ca-certificates checkinstall -y --no-install-recommends && \
   update-ca-certificates
 
 # Install dependencies
