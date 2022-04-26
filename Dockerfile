@@ -67,7 +67,7 @@ RUN \
   apt-get update && \
   apt-get dist-upgrade -y && \
   # Needed to handle the HTTPS certs and import third-party repos
-  apt-get install gnupg2 ca-certificates checkinstall -y && \
+  apt-get install gnupg2 ca-certificates --no-install-recommends -y && \
   update-ca-certificates
 
 # Apply the s6-overlay
