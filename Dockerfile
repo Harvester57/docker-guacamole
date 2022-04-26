@@ -1,5 +1,5 @@
-# Cf. https://github.com/docker-library/docs/blob/master/tomcat/README.md#supported-tags-and-respective-dockerfile-links
-FROM debian:bullseye-20220418
+# Cf. https://hub.docker.com/_/debian
+FROM debian:sid-20220418
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
@@ -11,7 +11,7 @@ WORKDIR ${GUACAMOLE_HOME}
 RUN \
   apt-get update && \
   # Needed to handle the HTTPS certs and import third-party repos
-  apt-get install curl gnupg2 ca-certificates checkinstall -y --no-install-recommends && \
+  apt-get install curl ca-certificates checkinstall -y --no-install-recommends && \
   update-ca-certificates
 
 # Install dependencies
@@ -36,14 +36,14 @@ RUN \
   cd guacamole-server-${GUAC_VER} && \
   export CFLAGS="-O3 -pipe -g0 -s -march=broadwell -mtune=broadwell -fstack-protector-all -D_FORTIFY_SOURCE=2 -Wp,-D_FORTIFY_SOURCE=2 -fstack-clash-protection -flto=4 -fPIE -pie" && \
   export LDFLAGS="-Wl,-z,relro -Wl,-z,now -Wl,--as-needed -Wl,-z,defs -Wl,-z,noexecheap -Wl,-O1 -Wl,-z,noexecstack -Wl,-z,separate-code -Wl,--strip-all" && \
-  ./configure --disable-guacenc --disable-guaclog --enable-static --disable-kubernetes --with-rdp --with-vnc --with-ssh && \
+  ./configure --disable-guacenc --disable-guaclog --enable-static --disable-kubernetes --with-rdp --with-vnc --with-ssh --without-telnet && \
   make -j$(getconf _NPROCESSORS_ONLN) && \
   checkinstall --install=no --default && \
   cp *.deb / && ls /
   
 # Multi-stage build
 # Cf. https://github.com/docker-library/docs/blob/master/tomcat/README.md#supported-tags-and-respective-dockerfile-links
-FROM tomcat:9.0.62-jdk17
+FROM tomcat:9.0.62-jdk17-openjdk-slim-bullseye
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
@@ -54,7 +54,7 @@ ENV ARCH=amd64 \
   POSTGRES_USER=guacamole \
   POSTGRES_DB=guacamole_db \
   # https://jdbc.postgresql.org/download.html#current
-  JDBC_VER=42.3.3 \
+  JDBC_VER=42.3.4 \
   # https://github.com/just-containers/s6-overlay/releases
   OVERLAY_VER=2.2.0.3
 
@@ -67,7 +67,7 @@ RUN \
   apt-get update && \
   apt-get dist-upgrade -y && \
   # Needed to handle the HTTPS certs and import third-party repos
-  apt-get install gnupg2 ca-certificates --no-install-recommends -y && \
+  apt-get install curl gnupg2 ca-certificates --no-install-recommends -y && \
   update-ca-certificates
 
 # Apply the s6-overlay
