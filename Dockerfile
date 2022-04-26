@@ -1,5 +1,5 @@
 # Cf. https://hub.docker.com/_/debian
-FROM debian:sid-20220418
+FROM debian:bullseye-20220418
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
@@ -20,8 +20,8 @@ RUN \
   libcairo2-dev libjpeg62-turbo-dev libpng-dev \
   libossp-uuid-dev libavcodec-dev libavutil-dev libavformat-dev \
   libswscale-dev freerdp2-dev libfreerdp-client2-2 libpango1.0-dev \
-  libssh2-1-dev libtelnet-dev libvncserver-dev \
-  libpulse-dev libssl-dev libvorbis-dev libwebp-dev libwebsockets-dev \
+  libssh2-1-dev libvncserver-dev \
+  libssl-dev libvorbis-dev libwebp-dev libwebsockets-dev \
   ghostscript build-essential --no-install-recommends && \
   apt-get clean && \ 
   rm -rf /var/lib/apt/lists/*
