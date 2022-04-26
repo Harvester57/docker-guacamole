@@ -16,7 +16,6 @@ RUN \
 
 # Install dependencies
 RUN \
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8 && \
   apt-get update && apt-get install -y \
   libcairo2-dev libjpeg62-turbo-dev libpng-dev \
   libossp-uuid-dev libavcodec-dev libavutil-dev libavformat-dev \
@@ -32,7 +31,7 @@ RUN [ "$ARCH" = "amd64" ] && ln -s /usr/local/lib/freerdp /usr/lib/x86_64-linux-
 
 # Build guacamole-server
 RUN \
-  curl -k -SLO "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/${GUAC_VER}/source/guacamole-server-${GUAC_VER}.tar.gz" && \
+  curl -k -SLO "https://dlcdn.apache.org/guacamole/${GUAC_VER}/source/guacamole-server-${GUAC_VER}.tar.gz" && \
   tar -xzf guacamole-server-${GUAC_VER}.tar.gz && \
   cd guacamole-server-${GUAC_VER} && \
   export CFLAGS="-O3 -pipe -g0 -s -march=broadwell -mtune=broadwell -fstack-protector-all -D_FORTIFY_SOURCE=2 -Wp,-D_FORTIFY_SOURCE=2 -fstack-clash-protection -flto=4 -fPIE -pie" && \
