@@ -80,9 +80,8 @@ RUN \
   ${GUACAMOLE_HOME}/lib \
   ${GUACAMOLE_HOME}/extensions
 
+# Install PostgreSQL and required dependencies
 COPY postgresql.list /etc/apt/sources.list.d
-COPY --from=0 /*.deb /
-
 RUN \
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8 && \
   apt-get update && apt-get install -y \
@@ -92,6 +91,7 @@ RUN \
   rm -rf /var/lib/apt/lists/*
 
 # Install Guacamole deb package imported from builder
+COPY --from=0 /*.deb /
 RUN \
   dpkg -i /*.deb && \
   ldconfig
@@ -112,8 +112,8 @@ RUN \
 RUN \
   set -xe && \
   mkdir ${GUACAMOLE_HOME}/extensions-available && \
-  for i in auth-ldap auth-duo auth-header auth-cas auth-openid auth-quickconnect auth-totp; do \
-  echo "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/${GUAC_VER}/binary/guacamole-${i}-${GUAC_VER}.tar.gz" && \
+  for i in auth-ldap auth-openid auth-totp; do \
+  echo "https://dlcdn.apache.org/guacamole/${GUAC_VER}/binary/guacamole-${i}-${GUAC_VER}.tar.gz" && \
   curl -k -SLO "http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/${GUAC_VER}/binary/guacamole-${i}-${GUAC_VER}.tar.gz" && \
   tar -xzf guacamole-${i}-${GUAC_VER}.tar.gz && \
   cp guacamole-${i}-${GUAC_VER}/guacamole-${i}-${GUAC_VER}.jar ${GUACAMOLE_HOME}/extensions-available/ && \
