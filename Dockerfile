@@ -43,7 +43,7 @@ RUN \
   
 # Multi-stage build
 # Cf. https://github.com/docker-library/docs/blob/master/tomcat/README.md#supported-tags-and-respective-dockerfile-links
-FROM tomcat:9.0.62-jdk17-openjdk-slim-bullseye
+FROM tomcat:9.0.63-jre11-openjdk-bullseye
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
