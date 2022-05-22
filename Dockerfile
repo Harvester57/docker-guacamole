@@ -1,5 +1,5 @@
 # Cf. https://hub.docker.com/_/debian
-FROM debian:bullseye-20220509
+FROM debian:bullseye-20220509 AS BUILDER
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
@@ -32,8 +32,11 @@ RUN [ "$ARCH" = "amd64" ] && ln -s /usr/local/lib/freerdp /usr/lib/x86_64-linux-
 # Build guacamole-server
 RUN \
   curl -k -SLO "https://dlcdn.apache.org/guacamole/${GUAC_VER}/source/guacamole-server-${GUAC_VER}.tar.gz" && \
-  tar -xzf guacamole-server-${GUAC_VER}.tar.gz && \
-  cd guacamole-server-${GUAC_VER} && \
+  tar -xzf guacamole-server-${GUAC_VER}.tar.gz
+  
+WORKDIR guacamole-server-${GUAC_VER}
+
+RUN \
   export CFLAGS="-O3 -pipe -g0 -s -march=broadwell -mtune=broadwell -fstack-protector-all -D_FORTIFY_SOURCE=2 -Wp,-D_FORTIFY_SOURCE=2 -fstack-clash-protection -flto=4 -fPIE -pie" && \
   export LDFLAGS="-Wl,-z,relro -Wl,-z,now -Wl,--as-needed -Wl,-z,defs -Wl,-z,noexecheap -Wl,-O1 -Wl,-z,noexecstack -Wl,-z,separate-code -Wl,--strip-all" && \
   ./configure --disable-guacenc --disable-guaclog --enable-static --disable-kubernetes --with-rdp --with-vnc --with-ssh --without-telnet && \
@@ -65,7 +68,6 @@ RUN [ "$ARCH" = "amd64" ] && ln -s /usr/local/lib/freerdp /usr/lib/x86_64-linux-
 
 RUN \
   apt-get update && \
-  apt-get dist-upgrade -y && \
   # Needed to handle the HTTPS certs and import third-party repos
   apt-get install curl gnupg2 ca-certificates --no-install-recommends -y && \
   update-ca-certificates
@@ -91,7 +93,7 @@ RUN \
   rm -rf /var/lib/apt/lists/*
 
 # Install Guacamole deb package imported from builder
-COPY --from=0 /*.deb /
+COPY --from=BUILDER /*.deb /
 RUN \
   dpkg -i /*.deb && \
   ldconfig
