@@ -34,7 +34,7 @@ RUN \
   curl -k -SLO "https://dlcdn.apache.org/guacamole/${GUAC_VER}/source/guacamole-server-${GUAC_VER}.tar.gz" && \
   tar -xzf guacamole-server-${GUAC_VER}.tar.gz
   
-WORKDIR guacamole-server-${GUAC_VER}
+WORKDIR /app/guacamole/guacamole-server-${GUAC_VER}
 
 RUN \
   export CFLAGS="-O3 -pipe -g0 -s -march=broadwell -mtune=broadwell -fstack-protector-all -D_FORTIFY_SOURCE=2 -Wp,-D_FORTIFY_SOURCE=2 -fstack-clash-protection -flto=4 -fPIE -pie" && \
