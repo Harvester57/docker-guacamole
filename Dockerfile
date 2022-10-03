@@ -56,8 +56,8 @@ ENV ARCH=amd64 \
   PGDATA=/config/postgres \
   POSTGRES_USER=guacamole \
   POSTGRES_DB=guacamole_db \
-  # https://jdbc.postgresql.org/download.html#current
-  JDBC_VER=42.4.2 \
+  # https://jdbc.postgresql.org/download/
+  JDBC_VER=42.5.0 \
   # https://github.com/just-containers/s6-overlay/releases
   OVERLAY_VER=2.2.0.3
 
