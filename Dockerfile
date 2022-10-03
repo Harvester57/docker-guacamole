@@ -87,7 +87,6 @@ RUN \
 # Install PostgreSQL and required dependencies
 COPY postgresql.list /etc/apt/sources.list.d
 RUN \
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8 && \
   apt-get update && apt-get install -y \
   postgresql-${PG_MAJOR} libcairo2 libfreerdp2-2 libfreerdp-server2-2 libfreerdp-client2-2 \
   libfreerdp-shadow-subsystem2-2 libfreerdp-shadow2-2 libvncserver1 libvncclient1 --no-install-recommends && \
