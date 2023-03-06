@@ -46,7 +46,7 @@ RUN \
   
 # Multi-stage build
 # Cf. https://github.com/docker-library/docs/blob/master/tomcat/README.md#supported-tags-and-respective-dockerfile-links
-FROM tomcat:9.0.71-jre17-temurin-focal
+FROM tomcat:9.0.73-jre17-temurin-focal
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
