@@ -46,18 +46,18 @@ RUN \
   
 # Multi-stage build
 # Cf. https://github.com/docker-library/docs/blob/master/tomcat/README.md#supported-tags-and-respective-dockerfile-links
-FROM tomcat:9.0.80-jdk21-openjdk-slim-bookworm
+FROM tomcat:9.0.80-jdk21-openjdk-slim-bullseye
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
-  GUAC_VER=1.4.0 \
+  GUAC_VER=1.5.3 \
   GUACAMOLE_HOME=/app/guacamole \
   PG_MAJOR=9.6 \
   PGDATA=/config/postgres \
   POSTGRES_USER=guacamole \
   POSTGRES_DB=guacamole_db \
   # https://jdbc.postgresql.org/download/
-  JDBC_VER=42.5.0 \
+  JDBC_VER=42.6.0 \
   # https://github.com/just-containers/s6-overlay/releases
   OVERLAY_VER=2.2.0.3
 
