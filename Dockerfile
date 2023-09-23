@@ -1,10 +1,10 @@
 # Cf. https://hub.docker.com/_/debian
-FROM debian:bullseye-20230919 AS BUILDER
+FROM debian:bookworm-20230919 AS BUILDER
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
   GUACAMOLE_HOME=/app/guacamole \
-  GUAC_VER=1.4.0
+  GUAC_VER=1.5.3
 
 WORKDIR ${GUACAMOLE_HOME}
 
@@ -46,7 +46,7 @@ RUN \
   
 # Multi-stage build
 # Cf. https://github.com/docker-library/docs/blob/master/tomcat/README.md#supported-tags-and-respective-dockerfile-links
-FROM tomcat:9.0.80-jdk21-openjdk-slim-bullseye
+FROM tomcat:9.0.80-jdk21-openjdk-slim-bookworm
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
