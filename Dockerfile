@@ -1,5 +1,5 @@
 # Cf. https://hub.docker.com/_/debian
-FROM debian:bullseye-20241223 AS BUILDER
+FROM debian:bullseye-20250113 AS BUILDER
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
