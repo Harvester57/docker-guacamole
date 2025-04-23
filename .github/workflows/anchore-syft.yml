@@ -37,4 +37,5 @@ jobs:
       with:
         image: "localbuild/testimage:latest"
         artifact-name: github.sbom.json
-        dependency-snapshot: true
+        dependency-snapshot: false
+        format: cyclonedx
