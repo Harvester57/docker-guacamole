@@ -19,10 +19,12 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 jobs:
   Anchore-Build-Scan:
     permissions:
+      actions: read
       contents: write # required to upload to the Dependency submission API
     runs-on: ubuntu-latest
     steps:
