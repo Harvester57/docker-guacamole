@@ -71,6 +71,7 @@ RUN \
   # Needed to handle the HTTPS certs and import third-party repos
   apt-get install curl gnupg2 ca-certificates --no-install-recommends -y && \
   update-ca-certificates && \
+  apt-get dist-upgrade -y \
   apt-get clean && \ 
   rm -rf /var/lib/apt/lists/*
 
