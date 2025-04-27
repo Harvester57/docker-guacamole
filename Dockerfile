@@ -1,10 +1,11 @@
 # Cf. https://hub.docker.com/_/debian
 FROM debian:bookworm-20250407@sha256:00cd074b40c4d99ff0c24540bdde0533ca3791edcdac0de36d6b9fb3260d89e2 AS BUILDER
 
-ENV ARCH=amd64 \
-  # https://guacamole.apache.org/releases/
-  GUACAMOLE_HOME=/app/guacamole \
-  GUAC_VER=1.5.5
+ARG ARCH=amd64
+ARG GUACAMOLE_HOME=/app/guacamole
+# https://guacamole.apache.org/releases/
+ARG GUAC_VER=1.5.5
+ARG DEBIAN_FRONTEND=noninteractive
 
 WORKDIR ${GUACAMOLE_HOME}
 
@@ -16,14 +17,14 @@ RUN \
 
 # Install dependencies
 RUN \
-  apt-get update && apt-get install -y \
+  apt-get install -y \
   libcairo2-dev libjpeg62-turbo-dev libpng-dev \
   libossp-uuid-dev libavcodec-dev libavutil-dev libavformat-dev \
   libswscale-dev freerdp2-dev libfreerdp-client2-2 libpango1.0-dev \
   libssh2-1-dev libvncserver-dev \
   libssl-dev libvorbis-dev libwebp-dev libwebsockets-dev \
   ghostscript build-essential --no-install-recommends && \
-  apt-get clean && \ 
+  apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
 # Link FreeRDP to where guac expects it to be
@@ -48,18 +49,19 @@ RUN \
 # Cf. https://github.com/docker-library/docs/blob/master/tomcat/README.md#supported-tags-and-respective-dockerfile-links
 FROM tomcat:9.0.80-jdk21-openjdk-slim-bullseye@sha256:7fd9eae50d501cdbe1b9dbcd83c34d80230ac6706afa7c508ca1ca51a9953a2c
 
-ENV ARCH=amd64 \
+ARG ARCH=amd64
   # https://guacamole.apache.org/releases/
-  GUAC_VER=1.5.5 \
-  GUACAMOLE_HOME=/app/guacamole \
-  PG_MAJOR=9.6 \
-  PGDATA=/config/postgres \
-  POSTGRES_USER=guacamole \
-  POSTGRES_DB=guacamole_db \
-  # https://jdbc.postgresql.org/download/
-  JDBC_VER=42.7.5 \
-  # https://github.com/just-containers/s6-overlay/releases
-  OVERLAY_VER=2.2.0.3
+ARG GUAC_VER=1.5.5
+ARG GUACAMOLE_HOME=/app/guacamole
+ARG PG_MAJOR=9.6
+ARG PGDATA=/config/postgres
+ARG POSTGRES_USER=guacamole
+ARG POSTGRES_DB=guacamole_db
+# https://jdbc.postgresql.org/download/
+ARG JDBC_VER=42.7.5
+# https://github.com/just-containers/s6-overlay/releases
+ARG OVERLAY_VER=2.2.0.3
+ARG DEBIAN_FRONTEND=noninteractive
 
 WORKDIR ${GUACAMOLE_HOME}
 
@@ -72,7 +74,7 @@ RUN \
   apt-get install curl gnupg2 ca-certificates --no-install-recommends -y && \
   update-ca-certificates && \
   apt-get dist-upgrade -y && \
-  apt-get clean && \ 
+  apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
 # Apply the s6-overlay
