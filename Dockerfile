@@ -1,5 +1,5 @@
 # Cf. https://hub.docker.com/_/debian
-FROM debian:bullseye-20250407 AS BUILDER
+FROM debian:bookworm-20250407@sha256:00cd074b40c4d99ff0c24540bdde0533ca3791edcdac0de36d6b9fb3260d89e2 AS BUILDER
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
@@ -46,7 +46,7 @@ RUN \
   
 # Multi-stage build
 # Cf. https://github.com/docker-library/docs/blob/master/tomcat/README.md#supported-tags-and-respective-dockerfile-links
-FROM tomcat:9.0.80-jdk21-openjdk-slim-bullseye
+FROM tomcat:9.0.80-jdk21-openjdk-slim-bullseye@sha256:7fd9eae50d501cdbe1b9dbcd83c34d80230ac6706afa7c508ca1ca51a9953a2c
 
 ENV ARCH=amd64 \
   # https://guacamole.apache.org/releases/
