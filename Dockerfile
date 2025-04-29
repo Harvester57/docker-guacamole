@@ -1,5 +1,5 @@
 # Cf. https://hub.docker.com/_/debian
-FROM debian:bookworm-20250407@sha256:00cd074b40c4d99ff0c24540bdde0533ca3791edcdac0de36d6b9fb3260d89e2 AS BUILDER
+FROM debian:bookworm-20250428@sha256:264982ff4d18000fa74540837e2c43ca5137a53a83f8f62c7b3803c0f0bdcd56 AS BUILDER
 
 ARG ARCH=amd64
 ARG GUACAMOLE_HOME=/app/guacamole
