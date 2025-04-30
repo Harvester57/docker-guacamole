@@ -24,7 +24,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/guacamole:latest
       -
         name: Scan image
-        uses: anchore/scan-action@v6.1.0
+        uses: anchore/scan-action@v6.2.0
         id: scan
         with:
           add-cpes-if-none: true
