@@ -32,7 +32,7 @@ jobs:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/guacamole:latest
       -
         name: upload Anchore scan SARIF report
-        uses: github/codeql-action/upload-sarif@v3.28.18
+        uses: github/codeql-action/upload-sarif@v3.28.19
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
       -
