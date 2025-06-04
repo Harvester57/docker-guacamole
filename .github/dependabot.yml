@@ -3,8 +3,6 @@ updates:
   - package-ecosystem: "docker" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
-      interval: "daily"
-    schedule:
       # Check for updates to GitHub Actions every weekday
       interval: "cron"
       cronjob: "0 18 * * *"
