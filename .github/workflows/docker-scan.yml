@@ -24,7 +24,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/guacamole:latest
       -
         name: Scan image
-        uses: anchore/scan-action@v6.2.0
+        uses: anchore/scan-action@v6.3.0
         id: scan
         with:
           add-cpes-if-none: true
@@ -32,7 +32,7 @@ jobs:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/guacamole:latest
       -
         name: upload Anchore scan SARIF report
-        uses: github/codeql-action/upload-sarif@v3.28.19
+        uses: github/codeql-action/upload-sarif@v3.29.0
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
       -
