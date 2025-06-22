@@ -3,8 +3,8 @@ name: Docker Image CI
 on:
   push:
     branches: [main]
-    tags:
-      - '*'
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
       -
         name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v6.16.0
+        uses: docker/build-push-action@v6.18.0
         with:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/guacamole:latest
