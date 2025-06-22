@@ -1,5 +1,5 @@
 # Cf. https://hub.docker.com/_/debian
-FROM debian:bookworm-20250610@sha256:0d8498a0e9e6a60011df39aab78534cfe940785e7c59d19dfae1eb53ea59babe AS BUILDER
+FROM debian:bookworm@sha256:0d8498a0e9e6a60011df39aab78534cfe940785e7c59d19dfae1eb53ea59babe AS BUILDER
 
 ARG ARCH=amd64
 ARG GUACAMOLE_HOME=/app/guacamole
@@ -58,7 +58,7 @@ ARG PGDATA=/config/postgres
 ARG POSTGRES_USER=guacamole
 ARG POSTGRES_DB=guacamole_db
 # https://jdbc.postgresql.org/download/
-ARG JDBC_VER=42.7.5
+ARG JDBC_VER=42.7.7
 # https://github.com/just-containers/s6-overlay/releases
 ARG OVERLAY_VER=2.2.0.3
 ARG DEBIAN_FRONTEND=noninteractive
