@@ -1,0 +1,20 @@
+name: Docker Image CI
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.11.1
+      -
+        name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v6.18.0
+        with:
+          push: false
+          tags: localimage/testimage:latest
