@@ -7,24 +7,35 @@ on:
       - '*'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   docker:
+    permissions:
+      contents: read  # for docker/build-push-action to read repo content
+      security-events: write  # for github/codeql-action/upload-sarif to upload SARIF results
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@002fdce3c6a235733a90a27c80493a3241e56863 # v2.12.1
+        with:
+          egress-policy: audit
+
       -
         name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3.11.1
+        uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
       -
         name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v6.18.0
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
           push: false
           load: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/guacamole:latest
       -
         name: Scan image
-        uses: anchore/scan-action@v6.3.0
+        uses: anchore/scan-action@be7a22da4f22dde446c4c4c099887ff5b256526c # v6.3.0
         id: scan
         with:
           add-cpes-if-none: true
@@ -32,7 +43,7 @@ jobs:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/guacamole:latest
       -
         name: upload Anchore scan SARIF report
-        uses: github/codeql-action/upload-sarif@v3.29.1
+        uses: github/codeql-action/upload-sarif@39edc492dbe16b1465b0cafca41432d857bdb31a # v3.29.1
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
       -
