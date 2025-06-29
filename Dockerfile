@@ -4,7 +4,7 @@ FROM debian:bullseye@sha256:0d3279ff38fb2024358b2f24fbb99122f9a9a40618bb526b6145
 ARG ARCH=amd64
 ARG GUACAMOLE_HOME=/app/guacamole
 # https://guacamole.apache.org/releases/
-ARG GUAC_VER=1.5.5
+ARG GUAC_VER=1.6.0
 ARG DEBIAN_FRONTEND=noninteractive
 
 WORKDIR ${GUACAMOLE_HOME}
@@ -51,7 +51,7 @@ FROM tomcat:9.0.80-jdk21-openjdk-slim-bullseye@sha256:7fd9eae50d501cdbe1b9dbcd83
 
 ARG ARCH=amd64
   # https://guacamole.apache.org/releases/
-ARG GUAC_VER=1.5.5
+ARG GUAC_VER=1.6.0
 ARG GUACAMOLE_HOME=/app/guacamole
 ARG PG_MAJOR=9.6
 ARG PGDATA=/config/postgres
