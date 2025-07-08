@@ -89,12 +89,12 @@ RUN \
 
 # Install PostgreSQL and required dependencies
 COPY postgresql.list /etc/apt/sources.list.d
-RUN \
-  apt-get update && apt-get install -y \
+RUN apt update
+RUN apt install -y \
   postgresql-${PG_MAJOR} libcairo2 libfreerdp2-2 libfreerdp-server2-2 libfreerdp-client2-2 \
-  libfreerdp-shadow-subsystem2-2 libfreerdp-shadow2-2 libvncserver1 libvncclient1 --no-install-recommends && \
-  apt-get clean && \ 
-  rm -rf /var/lib/apt/lists/*
+  libfreerdp-shadow-subsystem2-2 libfreerdp-shadow2-2 libvncserver1 libvncclient1 --no-install-recommends
+RUN apt-get clean
+RUN rm -rf /var/lib/apt/lists/*
 
 # Install Guacamole deb package imported from builder
 COPY --from=BUILDER /*.deb /
