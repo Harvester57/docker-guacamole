@@ -1,1 +1,1 @@
-deb [trusted=yes] http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main
+deb [trusted=yes] http://apt.postgresql.org/pub/repos/apt/ noble-pgdg main
