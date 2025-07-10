@@ -47,7 +47,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Apt faster
-        uses: ./.github/actions/apt-faster/action.yml
+        uses: ./.github/actions/apt-faster
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
