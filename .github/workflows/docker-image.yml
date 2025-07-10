@@ -42,12 +42,12 @@ jobs:
         uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
         with:
           egress-policy: audit
-      
-      - name: Apt faster
-        uses: ./.github/actions/apt-faster/action.yml
 
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Apt faster
+        uses: ./.github/actions/apt-faster/action.yml
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
