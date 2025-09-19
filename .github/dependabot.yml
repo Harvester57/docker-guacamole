@@ -8,9 +8,7 @@ updates:
   assignees:
   - "Harvester57"
   schedule:
-    interval: "cron"
-    cronjob: "0 7 * * *"
-    timezone: "Europe/Paris"
+    interval: "weekly"
   groups:
     docker-dependencies:
       applies-to: version-updates
@@ -24,9 +22,7 @@ updates:
   assignees:
   - "Harvester57"
   schedule:
-    interval: "cron"
-    cronjob: "0 7 * * *"
-    timezone: "Europe/Paris"
+    interval: "weekly"
   groups:
     actions-dependencies:
       applies-to: version-updates
