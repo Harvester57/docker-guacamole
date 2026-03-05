@@ -1,6 +1,6 @@
 # Cf. https://hub.docker.com/_/debian
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
-FROM debian:bullseye@sha256:a50c3ed0200d2f58736c3bb02b4a9f174f3d6d3bd866f2f640375f1e82c61348 AS builder
+FROM debian:bullseye@sha256:550c53afe18c60e0dc975327dcb75a4ef8265e247e1190822bf8881a70825fce AS builder
 
 ARG ARCH=amd64
 ARG GUACAMOLE_HOME=/app/guacamole
