@@ -12,19 +12,15 @@ WORKDIR ${GUACAMOLE_HOME}
 
 RUN \
   apt-get update && \
-  # Needed to handle the HTTPS certs and import third-party repos
-  apt-get install curl ca-certificates checkinstall -y --no-install-recommends && \
-  update-ca-certificates
-
-# Install dependencies
-RUN \
-  apt-get install -y \
-  libcairo2-dev libjpeg62-turbo-dev libpng-dev \
-  libossp-uuid-dev libavcodec-dev libavutil-dev libavformat-dev \
-  libswscale-dev freerdp2-dev libfreerdp-client2-2 libpango1.0-dev \
-  libssh2-1-dev libvncserver-dev \
-  libssl-dev libvorbis-dev libwebp-dev libwebsockets-dev \
-  ghostscript build-essential --no-install-recommends && \
+  apt-get install -y --no-install-recommends \
+    curl ca-certificates checkinstall \
+    libcairo2-dev libjpeg62-turbo-dev libpng-dev \
+    libossp-uuid-dev libavcodec-dev libavutil-dev libavformat-dev \
+    libswscale-dev freerdp2-dev libfreerdp-client2-2 libpango1.0-dev \
+    libssh2-1-dev libvncserver-dev \
+    libssl-dev libvorbis-dev libwebp-dev libwebsockets-dev \
+    ghostscript build-essential && \
+  update-ca-certificates && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
@@ -49,6 +45,10 @@ RUN \
 # Multi-stage build
 # Cf. https://github.com/docker-library/docs/blob/master/tomcat/README.md#supported-tags-and-respective-dockerfile-links
 FROM tomcat:11-jdk21
+
+LABEL org.opencontainers.image.authors="Florian Stosse <florian.stosse@gmail.com>"
+LABEL org.opencontainers.image.description="Apache Guacamole environment"
+LABEL org.opencontainers.image.licenses="Apache-2.0"
 
 ARG ARCH=amd64
   # https://guacamole.apache.org/releases/
@@ -98,7 +98,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Guacamole deb package imported from builder
-COPY --from=BUILDER /*.deb /
+COPY --from=builder /*.deb /
 RUN \
   dpkg -i /*.deb && \
   ldconfig
@@ -127,8 +127,8 @@ RUN \
   rm -rf guacamole-${i}-${GUAC_VER} guacamole-${i}-${GUAC_VER}.tar.gz \
   ;done
 
-ENV PATH=/usr/lib/postgresql/${PG_MAJOR}/bin:$PATH
-ENV GUACAMOLE_HOME=/config/guacamole
+ENV PATH="/usr/lib/postgresql/${PG_MAJOR}/bin:$PATH" \
+    GUACAMOLE_HOME=/config/guacamole
 
 WORKDIR /config
 

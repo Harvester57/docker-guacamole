@@ -1,0 +1,18 @@
+# Git & GitHub
+.git
+.gitignore
+.github
+
+# Documentation
+*.md
+
+# Python cache & artifacts
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+
+# OS artifacts
+.DS_Store
+Thumbs.db
