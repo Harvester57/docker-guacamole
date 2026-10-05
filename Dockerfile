@@ -59,7 +59,7 @@ RUN export CFLAGS="-O3 -pipe -fstack-protector-strong -D_FORTIFY_SOURCE=2 -fstac
 # -------------------------------------------------------------
 # Stage 2: Runtime image (Tomcat 9 on Debian Bookworm)
 # -------------------------------------------------------------
-FROM tomcat:9.0-jdk21-openjdk-slim-bookworm
+FROM tomcat:11.0-jdk21-openjdk-slim-bookworm
 
 LABEL org.opencontainers.image.authors="Florian Stosse <florian.stosse@gmail.com>"
 LABEL org.opencontainers.image.description="Apache Guacamole environment"
