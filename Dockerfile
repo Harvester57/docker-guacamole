@@ -6,7 +6,7 @@ ARG GUAC_VER=1.6.0
 # -------------------------------------------------------------
 # Stage 1: Build guacamole-server
 # -------------------------------------------------------------
-FROM debian:bookworm-slim AS builder
+FROM debian:bookworm-20261005-slim@sha256:a4672c0cb26fbdde88e38fa2dfb6c681942306680e41e4378b28770b6e79ee91 AS builder
 
 ARG GUAC_VER
 ARG DEBIAN_FRONTEND=noninteractive
@@ -15,27 +15,27 @@ WORKDIR /app/guacamole
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        curl \
-        ca-certificates \
-        build-essential \
-        libcairo2-dev \
-        libjpeg62-turbo-dev \
-        libpng-dev \
-        libossp-uuid-dev \
-        libavcodec-dev \
-        libavutil-dev \
-        libavformat-dev \
-        libswscale-dev \
-        freerdp2-dev \
-        libfreerdp-client2-2 \
-        libpango1.0-dev \
-        libssh2-1-dev \
-        libvncserver-dev \
-        libssl-dev \
-        libvorbis-dev \
-        libwebp-dev \
-        libwebsockets-dev \
-        ghostscript && \
+    curl \
+    ca-certificates \
+    build-essential \
+    libcairo2-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libossp-uuid-dev \
+    libavcodec-dev \
+    libavutil-dev \
+    libavformat-dev \
+    libswscale-dev \
+    freerdp2-dev \
+    libfreerdp-client2-2 \
+    libpango1.0-dev \
+    libssh2-1-dev \
+    libvncserver-dev \
+    libssl-dev \
+    libvorbis-dev \
+    libwebp-dev \
+    libwebsockets-dev \
+    ghostscript && \
     rm -rf /var/lib/apt/lists/*
 
 RUN curl -sSL "https://dlcdn.apache.org/guacamole/${GUAC_VER}/source/guacamole-server-${GUAC_VER}.tar.gz" | tar -xz
@@ -45,21 +45,24 @@ WORKDIR /app/guacamole/guacamole-server-${GUAC_VER}
 RUN export CFLAGS="-O3 -pipe -fstack-protector-strong -D_FORTIFY_SOURCE=2 -fstack-clash-protection -fPIE -pie" && \
     export LDFLAGS="-Wl,-z,relro -Wl,-z,now -Wl,--as-needed" && \
     ./configure \
-        --prefix=/usr/local \
-        --disable-guacenc \
-        --disable-guaclog \
-        --disable-kubernetes \
-        --with-rdp \
-        --with-vnc \
-        --with-ssh \
-        --without-telnet && \
+    --prefix=/usr/local \
+    --disable-guacenc \
+    --disable-guaclog \
+    --disable-kubernetes \
+    --with-rdp \
+    --with-vnc \
+    --with-ssh \
+    --without-telnet && \
     make -j$(nproc) && \
     make install DESTDIR=/install
 
 # -------------------------------------------------------------
 # Stage 2: Runtime image (Tomcat 9 on Debian Bookworm)
 # -------------------------------------------------------------
-FROM tomcat:11.0-jdk21-openjdk-slim-bookworm
+FROM tomcat:9.0-jre21-temurin-noble@sha256:f5493380c0b71f044aa4d0362dc119f350c62dc157f753be6dcf1e3099520d7a AS tomcat
+
+# Cf. https://hub.docker.com/_/debian
+FROM debian:bookworm-20261005-slim@sha256:a4672c0cb26fbdde88e38fa2dfb6c681942306680e41e4378b28770b6e79ee91
 
 LABEL org.opencontainers.image.authors="Florian Stosse <florian.stosse@gmail.com>"
 LABEL org.opencontainers.image.description="Apache Guacamole environment"
@@ -70,7 +73,9 @@ ARG S6_ARCH=x86_64
 ARG GUAC_VER=1.6.0
 ARG GUACAMOLE_HOME=/app/guacamole
 ARG PG_MAJOR=15
-ARG JDBC_VER=42.7.7
+# https://jdbc.postgresql.org/download/
+ARG JDBC_VER=42.7.13
+# https://github.com/just-containers/s6-overlay/releases
 ARG S6_OVERLAY_VERSION=3.2.3.2
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -80,41 +85,46 @@ ENV GUAC_VER=${GUAC_VER} \
     PGDATA=/config/postgres \
     POSTGRES_USER=guacamole \
     POSTGRES_DB=guacamole_db \
-    PATH="/usr/lib/postgresql/${PG_MAJOR}/bin:$PATH"
+    JAVA_HOME=/opt/java/openjdk \
+    CATALINA_HOME=/usr/local/tomcat \
+    PATH="/usr/local/tomcat/bin:/opt/java/openjdk/bin:/usr/lib/postgresql/${PG_MAJOR}/bin:$PATH"
+
+COPY --from=tomcat /opt/java/openjdk /opt/java/openjdk
+COPY --from=tomcat /usr/local/tomcat /usr/local/tomcat
 
 WORKDIR ${GUACAMOLE_HOME}
 
 # Install runtime packages (PostgreSQL 15, FreeRDP runtime libs, utilities)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        curl \
-        ca-certificates \
-        xz-utils \
-        postgresql-${PG_MAJOR} \
-        postgresql-contrib-${PG_MAJOR} \
-        libcairo2 \
-        libjpeg62-turbo \
-        libpng16-16 \
-        libossp-uuid16 \
-        libavcodec59 \
-        libavutil57 \
-        libavformat59 \
-        libswscale6 \
-        libfreerdp2-2 \
-        libfreerdp-client2-2 \
-        libfreerdp-server2-2 \
-        libfreerdp-shadow2-2 \
-        libfreerdp-shadow-subsystem2-2 \
-        libpango-1.0-0 \
-        libssh2-1 \
-        libvncserver1 \
-        libvncclient1 \
-        libssl3 \
-        libvorbis0a \
-        libvorbisenc2 \
-        libwebp7 \
-        libwebsockets17 \
-        ghostscript && \
+    curl \
+    ca-certificates \
+    xz-utils \
+    postgresql-${PG_MAJOR} \
+    postgresql-contrib-${PG_MAJOR} \
+    libcairo2 \
+    libjpeg62-turbo \
+    libpng16-16 \
+    libossp-uuid16 \
+    libavcodec59 \
+    libavutil57 \
+    libavformat59 \
+    libswscale6 \
+    libfreerdp2-2 \
+    libfreerdp-client2-2 \
+    libfreerdp-server2-2 \
+    libfreerdp-shadow2-2 \
+    libfreerdp-shadow-subsystem2-2 \
+    libpango-1.0-0 \
+    libssh2-1 \
+    libvncserver1 \
+    libvncclient1 \
+    libssl3 \
+    libvorbis0a \
+    libvorbisenc2 \
+    libwebp7 \
+    libwebsockets17 \
+    ghostscript && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -144,9 +154,9 @@ RUN set -x && \
 
 # Install optional extensions (auth-ldap, auth-totp, auth-quickconnect, auth-duo, auth-header, and SSO openid/cas)
 RUN for ext in auth-ldap auth-totp auth-quickconnect auth-duo auth-header; do \
-        curl -sSL "https://dlcdn.apache.org/guacamole/${GUAC_VER}/binary/guacamole-${ext}-${GUAC_VER}.tar.gz" | tar -xz -C /tmp && \
-        cp /tmp/guacamole-${ext}-${GUAC_VER}/guacamole-${ext}-${GUAC_VER}.jar /app/guacamole/extensions-available/ && \
-        rm -rf /tmp/guacamole-${ext}-${GUAC_VER}*; \
+    curl -sSL "https://dlcdn.apache.org/guacamole/${GUAC_VER}/binary/guacamole-${ext}-${GUAC_VER}.tar.gz" | tar -xz -C /tmp && \
+    cp /tmp/guacamole-${ext}-${GUAC_VER}/guacamole-${ext}-${GUAC_VER}.jar /app/guacamole/extensions-available/ && \
+    rm -rf /tmp/guacamole-${ext}-${GUAC_VER}*; \
     done && \
     curl -sSL "https://dlcdn.apache.org/guacamole/${GUAC_VER}/binary/guacamole-auth-sso-${GUAC_VER}.tar.gz" | tar -xz -C /tmp && \
     cp /tmp/guacamole-auth-sso-${GUAC_VER}/openid/guacamole-auth-sso-openid-${GUAC_VER}.jar /app/guacamole/extensions-available/guacamole-auth-openid-${GUAC_VER}.jar && \

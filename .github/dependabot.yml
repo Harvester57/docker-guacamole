@@ -9,6 +9,9 @@ updates:
   - "Harvester57"
   schedule:
     interval: "weekly"
+  ignore:
+  - dependency-name: "tomcat"
+    versions: [">= 10.a"]
   groups:
     docker-dependencies:
       applies-to: version-updates
