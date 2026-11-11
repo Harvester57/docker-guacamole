@@ -6,7 +6,7 @@ ARG GUAC_VER=1.6.0
 # -------------------------------------------------------------
 # Stage 1: Build guacamole-server
 # -------------------------------------------------------------
-FROM debian:bookworm-slim@sha256:99c0b25c46d0214d5a2091092e7908907dcaecd6a962cde0ac700acee222b6f3 AS builder
+FROM debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc AS builder
 
 ARG GUAC_VER
 ARG DEBIAN_FRONTEND=noninteractive
@@ -59,10 +59,10 @@ RUN export CFLAGS="-O3 -pipe -fstack-protector-strong -D_FORTIFY_SOURCE=2 -fstac
 # -------------------------------------------------------------
 # Stage 2: Runtime image (Tomcat 9 on Debian Bookworm)
 # -------------------------------------------------------------
-FROM tomcat:9.0-jre21-temurin-noble@sha256:7766767a9f470426a0648e955c7bc8f79ac78c82e5f2673107f87221a81cad1b AS tomcat
+FROM tomcat:9.0-jre21-temurin-noble@sha256:b91b8fe484e00621a219899b835228a32affa0c9f824835a5e45a7e5a4690f45 AS tomcat
 
 # Cf. https://hub.docker.com/_/debian
-FROM debian:bookworm-slim@sha256:99c0b25c46d0214d5a2091092e7908907dcaecd6a962cde0ac700acee222b6f3
+FROM debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc
 
 LABEL org.opencontainers.image.authors="Florian Stosse <florian.stosse@gmail.com>"
 LABEL org.opencontainers.image.description="Apache Guacamole environment"
