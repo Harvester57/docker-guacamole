@@ -59,7 +59,7 @@ RUN export CFLAGS="-O3 -pipe -fstack-protector-strong -D_FORTIFY_SOURCE=2 -fstac
 # -------------------------------------------------------------
 # Stage 2: Runtime image (Tomcat 9 on Debian Bookworm)
 # -------------------------------------------------------------
-FROM tomcat:9.0-jre21-temurin-noble@sha256:4900beea2f430afd5062962585afe41bbb22569c5d2477eb3850c1ab669666f1 AS tomcat
+FROM tomcat:9.0-jre21-temurin-noble@sha256:4bcd87e970a44db45e3d1cdd3a7659114940f89d01c8f8605fa048fb3943c4e3 AS tomcat
 
 # Cf. https://hub.docker.com/_/debian
 FROM debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc
